@@ -117,11 +117,10 @@ char valueTranslator(int num){
 }
 std::ostream& operator<<(std::ostream& os, const Card& card){
     char outputSuit = suitTranslator(card.getSuit());
-    char outputValue = ' '; //for ace, jack, etc. 
     int value = card.getValue();
 
     if (value == 1 || value > 10){
-        outputValue = valueTranslator(value); 
+        char outputValue = valueTranslator(value); 
         os << outputSuit << " " << outputValue; 
         return os; 
     }

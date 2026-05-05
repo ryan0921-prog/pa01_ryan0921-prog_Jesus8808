@@ -17,7 +17,7 @@ int main(){
     }else{
         cout << "no match\n";
 
-        if (card1 > card2) cout << "greater\n";  
-        else cout << "less than\n"; 
+        if (card1 > card2) cout << "card1 is greater than card2\n";  
+        else cout << "card1 is less than card2\n"; 
     }
 }
