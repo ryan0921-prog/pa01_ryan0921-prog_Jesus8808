@@ -20,6 +20,4 @@ int main(){
         if (card1 > card2) cout << "greater\n";  
         else cout << "less than\n"; 
     }
-    
-
 }
