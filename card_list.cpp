@@ -81,5 +81,65 @@ void CardList::printInOrder() const {
 }
 
 
-//**ADD REMOVE FUNCTION AND THEN ADD THE ITERARORS AND ITS CLASS
+//** ADD THE ITERARORS AND ITS CLASS
 
+void CardList::remove(const Card& card) {
+    if (!contains(card)) { //if the card is not in the tree, we can just return
+        return;
+    }
+
+    //We will need to first first the node to remove
+    //then we can deal with three cases: Leaf node, one child node, and two child node
+    CardNode* curr = root; //start traversal at the root
+    CardNode* parent = nullptr; //keep track of the parent node
+    while (curr != nullptr && !(curr->data == card)) { //while we havent found the card 
+        parent = curr;  //update parent to our current node
+        if (card < curr->data) {  //if the card is less, than we can update curr to go left
+            curr = curr->left; //traverse left
+        } else { //if the card is greater, than we can update curr to go right
+            curr = curr->right; //traverse right
+        }
+
+    }
+    //Lil safety check (just incase) :)
+    if (curr == nullptr) { //if we didnt find the card, we can just return
+        return;
+    }
+
+    //CASE ONE: Leaf node aka no children
+    if (!curr->left && !curr->right) {
+        if (curr == root) { //if the node to remove is the roo, we can just make root null
+            root = nullptr;
+        } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can just set the left child of the parent to null
+            parent->left = nullptr;
+        } else { //else, it means the node to remove is the right child of its parent, so we can just set the right child of the parent to null
+            parent->right = nullptr;
+        }
+
+        delete curr; //delete the node to remove
+        //curr = nullptr; might have to set curr to null, but i dont think so since we deleteing it. 
+    }
+    
+    //CASE TWO: if the node we want to delete has a child, left or right,
+    //we can replace the current node with it's child and then delete the current node
+    
+    //for this im going to use a method similar to what I did for lab 03, if you need help undertsanding this part
+    //I can explain it to you with my lab03 code, but it is a usefule shortuct in my opibion.
+    else if (!curr->left || !curr->right) { //if the node has only one child
+        CardNode* child = (curr->left) ? curr->left : curr->right; //get the one that has the child
+
+        if (curr == root) { //if the node to remove is the root, we can just update root to be the child
+            root = child;
+        } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can update the left child of the parent to be the child
+            parent->left = child;
+        } else { //else, 
+            parent->right = child;
+        }
+        child->parent = parent; //update the parent pointer 
+        delete curr; //delete the node to remove
+    }
+
+
+
+
+}
