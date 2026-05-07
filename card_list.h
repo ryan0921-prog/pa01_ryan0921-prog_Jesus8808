@@ -19,4 +19,20 @@ struct CardNode {
 
 }
 
+//now we create our card list class which is the player's hand in the BST
+class CardList {
+public:
+    CardList(); //construcotor
+    ~CardList(); //destructor
+
+    bool contains(const Card& card) const;  //requiered public contains function
+    void insert(const Card& card); //required public insert function
+    void remove(const Card& card); //required public remove function
+    void printInOrder() const; //this will prin the cards in order from least to greatest.
+
+
+private:
+    CardNode* root;  //pointer to the root of the BST
+}
+
 #endif
