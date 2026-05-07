@@ -23,18 +23,43 @@ int main(int argv, char** argc){
     return 1;
   }
 
+  set<Card> aliceHand; 
+  set<Card> bobHand; 
+
   //Read each file
   while (getline (cardFile1, line) && (line.length() > 0)){
+    Card newCard;
+    newCard.setSuit(line[0]);
 
+    //hardcoding this cause it's literally the only situation where value is double digits 
+    if (line.size() == 4){
+      newCard.setValue(10); 
+    }
+    else newCard.setValue(line[2]);
+    aliceHand.insert(newCard);
   }
   cardFile1.close();
 
 
   while (getline (cardFile2, line) && (line.length() > 0)){
+    Card newCard;
+    newCard.setSuit(line[0]);
 
+    if (line.size() == 4){
+      newCard.setValue(10); 
+    }
+    else newCard.setValue(line[2]);
+    bobHand.insert(newCard);
   }
   cardFile2.close();
   
-  
+  for (Card x : aliceHand){
+    cout << x << "\n"; 
+  } cout << "\n"; 
+
+  for (Card x : bobHand){
+    cout << x << "\n";
+  } cout << "\n";
   return 0;
 }
+

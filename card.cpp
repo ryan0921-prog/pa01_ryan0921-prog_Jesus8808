@@ -3,6 +3,11 @@
 // Implementation of the classes defined in card.h
 #include "card.h"
 
+Card::Card(){
+    suit = 0;
+    value = 0; 
+}
+
 Card::Card(char s, int v){
     setSuit(s);
     value = v; 
@@ -39,9 +44,9 @@ char Card::getSuit() const{
 }
 
 //value 
-void Card::setValue(int v){
+/*void Card::setValue(int v){
     value = v; 
-}
+}*/
 
 void Card::setValue(char v){
     switch(v){
@@ -59,12 +64,13 @@ void Card::setValue(char v){
 
         case 'k':
         value = 13; 
+
+        default:
+        value = v - '0'; 
         break;
     }
 }
 
-//might run into future problems when doing stuff with ace, 
-//jack, queen, king :)
 int Card::getValue() const{
     return value; 
 }

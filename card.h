@@ -8,13 +8,14 @@
 
 class Card{
 public: 
-    Card(char s, int v);
+    Card();
+    //Card(char s, int v);
     Card(char s, char v); 
 
     void setSuit(char s);
     char getSuit() const;
 
-    void setValue(int v);
+    //void setValue(int v);
     int getValue() const;
 
     //non-numerical values 
