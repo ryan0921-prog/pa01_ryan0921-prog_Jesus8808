@@ -139,6 +139,42 @@ void CardList::remove(const Card& card) {
         delete curr; //delete the node to remove
     }
 
+    //CASE THREE: The node has two children, so we replace the current node with its in-order successor
+    //which is the smallest value that is greater than current node.
+    else {
+        CardNode* successor = curr->right; //start looking for the sucessor from child
+        while (successor->left != nullptr) {
+            successor = successor->left;  //keep spamming left until we have reached the smallest value
+            //on its right side.
+        }
+        curr->data = successor->data;//similar tp lab3, replace data from current with successor data
+        //from here on out it is similar to previous cases
+        //this section is from case one kind of
+        if (!successor->left && !successor->right) {
+            if (successor == successor->parent->left) {
+                successor->parent->left = nullptr;
+            } else {
+                successor->parent->right = nullptr;
+            }
+            delete successor;  //delete
+        }
+        else {
+            //this is similar to case two.
+            CardNode* child = (successor->left) ? successor->left : successor->right; //get the one that has the child
+
+            if (successor == successor->parent->left) { //if the successor is the left child of its parent
+                successor->parent->left = child;
+            } else { //else, 
+                successor->parent->right = child;
+            }
+            if (child != nullptr) { //update the parent pointer
+                child->parent = successor->parent;
+            }
+            delete successor; //delete the successor node
+        }
+
+    }
+
 
 
 
