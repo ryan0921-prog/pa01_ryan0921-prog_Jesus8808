@@ -32,6 +32,7 @@ public:
 
 
     void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
+    void inOrderHelper(CardNode* node) const; //helper function to print stuff in order usng recursion.
 
 
 private:

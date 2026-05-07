@@ -7,8 +7,7 @@
 
 CardList::CardList() : root(nullptr) {}  //constructor setup
 
-//I think I made a mistake with this function, we may have to change it later after some testing
-//but for now it is what it is smh :)
+
 void CardList::clear(CardNode* node) {
     if (node != nullptr) { //if the node is not null, we can continue traversing
         clear(node->left); //traverse left
@@ -36,7 +35,50 @@ bool CardList::contains(const Card& card) const {
     }
     return false;
 }
+//might have to change this function later, but for now it is what it is smh :)
+void CardList::insert(const Card& card) {
+    CardNode* newNode = new CardNode(card); //create a new node with the card data
+    if (root == nullptr) { //if the tree is empty, then root is ther new node
+        root = newNode;
+        return;
+    }
 
+    CardNode* curr = root; //once again set our traversal node to the root
+
+    //might need some help on the parent node stuff, since lowkey I suck at that.
+    CardNode* parent = nullptr; //keep track of the parent node
+
+    while (curr != nullptr) { //while not null
+        parent = curr; //update parent to current node
+        if (card < curr->data) { //if the card is less than current node's data, traverse left
+            curr = curr->left;
+        } else { //else, traverse right
+            curr = curr->right;
+        }
+    }
+
+    // This bit I had to look up, but we are inserting the new node as a childe of the parent node, i think
+    if (card < parent->data) { //if the card is less than parent's data, insert as left child
+        parent->left = newNode;
+    } else { //else, insert as right child
+        parent->right = newNode;
+    }
+    newNode->parent = parent; //set the parent pointer of the new node
+}
+
+//I'm not sure if I used the getter functions correctly but ill figure it our later or tomorrow.
+void CardList::inOrderHelper(CardNode* node) const {
+    if (node != nullptr) { //if the node is not null, we can continue traversing
+        inOrderHelper(node->left); //traverse left
+        std::cout << node->data.getSuit() << node->data.getValue() << " "; //print the current node's data using some our getters
+        inOrderHelper(node->right); //traverse right
+    }
+}
+
+void CardList::printInOrder() const {
+    inOrderHelper(root); //call the helper function starting from the root
+    std::cout << std::endl; //print a new line after printing all cards, like the formatting I believe
+}
 
 
 
