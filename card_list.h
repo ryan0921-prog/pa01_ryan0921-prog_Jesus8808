@@ -31,6 +31,9 @@ public:
     void printInOrder() const; //this will prin the cards in order from least to greatest.
 
 
+    void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
+
+
 private:
     CardNode* root;  //pointer to the root of the BST
 }
