@@ -17,7 +17,7 @@ struct CardNode {
     CardNode(const Card& card) : data(card), left(nullptr), right(nullptr), parent(nullptr) {}
 
 
-}
+};
 
 //now we create our card list class which is the player's hand in the BST
 class CardList {
@@ -37,7 +37,7 @@ public:
 
 private:
     CardNode* root;  //pointer to the root of the BST
-}
+};
 
 
 
