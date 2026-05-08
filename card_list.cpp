@@ -318,6 +318,9 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
             if (bobHand.contains(aliceCard)) {
                 std::cout << "Alice picked matching card " << aliceCard <<std::endl;
 
+                auto old_al_it = al_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
+                 ++al_it; //move the iterator to the next card before we remove the current card
+
                 aliceHand.remove(aliceCard); //removes the matching card
                 bobHand.remove(aliceCard); //removes the matching card
 
@@ -340,6 +343,9 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
 
                 bobHand.remove(bobCard); //removes the matching card
                 aliceHand.remove(bobCard); //removes the matching card
+
+                auto old_bob_it = bob_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
+                --bob_it; //move the iterator to the previous card before we remove the current card
 
                 founditsmatch  = true;  //reset it
                 break;  //dip
