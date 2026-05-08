@@ -1,9 +1,9 @@
 #include <iostream>
 #include "card_list.h"
-#include "card_list.cpp"
+
 #include <cassert>
 #include "card.h"
-#include "card.cpp"
+
 
 
 using namespace std;
