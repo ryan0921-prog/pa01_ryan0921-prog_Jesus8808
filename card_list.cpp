@@ -235,6 +235,7 @@ Iterator& Iterator::operator++() {
         while (curr->left) {
             curr = curr->left;
         }
+    }
         //case two if we go up
         else {
             CardNode* newParent = curr-> parent;
@@ -242,11 +243,12 @@ Iterator& Iterator::operator++() {
                 curr = newParent;
                 newParent = newParent->parent;
             }
-            curr = parent;
+
+            curr = newParent;
         }
 
         return *this;
-    }
+    
 }
 
 
@@ -269,6 +271,7 @@ Iterator& Iterator::operator--() {
         while(curr->right) {
             curr = curr->right;
         }
+    }
 
         //case two
         else {
@@ -278,10 +281,10 @@ Iterator& Iterator::operator--() {
                 newParent = newParent->parent;
             }
 
-            curr = parent;
+            curr = newParent;
         }
         return *this;
-    }
+    
 }
 
 
@@ -289,4 +292,12 @@ Iterator Iterator::operator--(int) {
     Iterator temp = *this; //store the current iterator in a temp variable
     --(*this); //use the pre-decrement to move to the previous node
     return temp; //return the original iterator
+}
+
+bool Iterator::operator==(const Iterator& other) const {
+    return curr == other.curr; //two iterators are equal if they point to the same node
+}
+
+bool Iterator::operator!=(const Iterator& other) const {
+    return curr != other.curr; //two iterators are not equal if they point to different nodes
 }
