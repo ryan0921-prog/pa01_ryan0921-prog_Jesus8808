@@ -32,7 +32,7 @@ int main(int argv, char** argc){
     newCard.setSuit(line[0]);
 
     //hardcoding this cause it's literally the only situation where value is double digits 
-    if (line.size() == 4){
+    if (line.size() == 4){ 
       newCard.setValue(10); 
     }
     else newCard.setValue(line[2]);
@@ -53,9 +53,13 @@ int main(int argv, char** argc){
   }
   cardFile2.close();
 
-  long unsigned int i = 0;
+  long unsigned int i = 0; //if i == the size of alice's hand, no matches have been found
   while (aliceHand.size() > 0 && bobHand.size() > 0 && i < aliceHand.size()){
     
+    //check alice's cards 
+    //  for each card, search bob's hand for the card
+    //  if found, print line and remove card from both hands
+    //  reset i
     for (Card x : aliceHand){
       if (bobHand.contains(x)){
         cout << "Alice picked matching card " << x << "\n";
@@ -67,6 +71,7 @@ int main(int argv, char** argc){
       i++;
     } 
 
+    //same logic as alice, but using reversing iterators
     for (auto it = bobHand.rbegin(); it != bobHand.rend(); ++it){
       if (aliceHand.contains(*it)){
         cout << "Bob picked matching card " << *it << "\n";
@@ -79,7 +84,8 @@ int main(int argv, char** argc){
     }
   }
 
-  cout << "Alice's cards:\n";
+  //print hands 
+  cout << "\nAlice's cards:\n";
   for (Card x : aliceHand){
     cout << x << "\n"; 
   } cout << endl; 
