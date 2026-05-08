@@ -224,5 +224,30 @@ Card* Iterator::operator->() {
 }
 
 
+Iterator& Iterator::operator++() {
+    if (!curr) {
+        return *this;
+    }
+
+    //case one for it got a right subtree
+    if (curr->right) {
+        curr = curr->right;
+        while (curr->left) {
+            curr = curr->left;
+        }
+        //case two if we go up
+        else {
+            CardNode* newParent = curr-> parent;
+            while (newParent && curr == parent->right) {
+                curr = newParent;
+                newParent = newParent->parent;
+            }
+            curr = parent;
+        }
+
+        return *this;
+    }
+}
+
 
 
