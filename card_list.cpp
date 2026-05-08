@@ -179,3 +179,52 @@ void CardList::remove(const Card& card) {
 
 
 }
+
+
+Iterator::Iterator(CardNode* root) {
+    curr = root;
+
+    if (curr == nullptr) {
+        return;  //if tree empty we dip
+    }
+    while (curr->left != nullptr) { //keep spamming left until we reach the smallest value, which is the first value in order
+        curr = curr->left;
+    }
+}
+
+
+Card& Iterator::operator*() {
+    return curr->data;
+}
+
+Card* Iterator::operator->() {
+    return &(curr->data);
+}
+
+Iterator& Iterator::operator++() {
+    if (curr == nullptr) return *this; //we out
+
+    //case one if we got a right subtree
+    if (curr->right != nullptr) {  //while we have a right child keep traversing right
+        curr = curr->right;
+        while (curr->left != nullptr) {  //while it has a left child keep traversing
+            curr = curr->left;
+        }
+    }
+
+    //case two, we got no right sybtree
+    else {
+        CardNode* newParent = curr->parent; //create a parent node, I really couldn't think of a better name
+
+        while (newParent != nullptr && curr == newParent->right) {
+            curr = newParent;
+            newParent = newParent->parent;
+
+        }
+
+        curr = newParent;
+    }
+
+    return *this;
+
+}
