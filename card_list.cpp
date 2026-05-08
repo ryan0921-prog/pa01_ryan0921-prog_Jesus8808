@@ -37,9 +37,8 @@ bool CardList::contains(const Card& card) const {
 }
 //might have to change this function later, but for now it is what it is smh :)
 void CardList::insert(const Card& card) {
-    CardNode* newNode = new CardNode(card); //create a new node with the card data
-    if (root == nullptr) { //if the tree is empty, then root is ther new node
-        root = newNode;
+    if (root == nullptr) { //if the tree is empty, we can just set the root to be the new node
+        root = new CardNode(card);
         return;
     }
 
@@ -56,14 +55,17 @@ void CardList::insert(const Card& card) {
             curr = curr->right;
         }
     }
+    CardNode* newNode = new CardNode(card); //create a new node with the card data
+     newNode->parent = parent; //set the parent pointer of the new node
 
-    // This bit I had to look up, but we are inserting the new node as a childe of the parent node, i think
+
+    // This bit i took inspiration from previous lab.
     if (card < parent->data) { //if the card is less than parent's data, insert as left child
         parent->left = newNode;
     } else { //else, insert as right child
         parent->right = newNode;
     }
-    newNode->parent = parent; //set the parent pointer of the new node
+   
 }
 
 //I'm not sure if I used the getter functions correctly but ill figure it our later or tomorrow.
@@ -145,35 +147,26 @@ void CardList::remove(const Card& card) {
     //which is the smallest value that is greater than current node.
     else {
         CardNode* successor = curr->right; //start looking for the sucessor from child
+        CardNode* successorParent = curr; //keep track of the parent of the successor
         while (successor->left != nullptr) {
-            successor = successor->left;  //keep spamming left until we have reached the smallest value
-            //on its right side.
+            successorParent = successor; //update successor parent to current successor
+            successor = successor->left; //traverse left to find the smallest value in the right
         }
         curr->data = successor->data;//similar tp lab3, replace data from current with successor data
         //from here on out it is similar to previous cases
         //this section is from case one kind of
-        if (!successor->left && !successor->right) {
-            if (successor == successor->parent->left) {
-                successor->parent->left = nullptr;
-            } else {
-                successor->parent->right = nullptr;
-            }
-            delete successor;  //delete
+        CardNode* child = successor->right;
+        if (successorParent->left == successor) {
+            successorParent->left = child;
         }
         else {
-            //this is similar to case two.
-            CardNode* child = (successor->left) ? successor->left : successor->right; //get the one that has the child
-
-            if (successor == successor->parent->left) { //if the successor is the left child of its parent
-                successor->parent->left = child;
-            } else { //else, 
-                successor->parent->right = child;
-            }
-            if (child != nullptr) { //update the parent pointer
-                child->parent = successor->parent;
-            }
-            delete successor; //delete the successor node
+            successorParent->right = child;
         }
+
+        if (child != nullptr) {
+            child->parent = successorParent;
+        }
+        delete successor; //delete the successor node}
 
     }
 
