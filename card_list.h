@@ -39,6 +39,26 @@ private:
     CardNode* root;  //pointer to the root of the BST
 };
 
+class Iterator {
+private:
+    CardNode* curr;
+
+
+public:
+    Iterator(CardNode* root);
+
+    Card& operator*();
+    Card* operator->();
+
+    Iterator& operator++(); //forward traversal, pre-increment
+    Iterator operator++(int); //forward traversal, post-increment
+    Iterator& operator--(); //reverse traversal, pre-decrement
+    Iterator operator--(int); //reverse traversal, post-decrement
+
+    bool operator==(const Iterator& other) const;
+    bool operator!=(const Iterator& other) const;
+};
+
 
 
 #endif
