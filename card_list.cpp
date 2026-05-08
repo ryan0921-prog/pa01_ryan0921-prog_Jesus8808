@@ -119,8 +119,9 @@ void CardList::remove(const Card& card) {
         }
 
         delete curr; //delete the node to remove
-        //curr = nullptr; might have to set curr to null, but i dont think so since we deleteing it. 
+        return;
     }
+
     
     //CASE TWO: if the node we want to delete has a child, left or right,
     //we can replace the current node with it's child and then delete the current node
@@ -132,6 +133,9 @@ void CardList::remove(const Card& card) {
 
         if (curr == root) { //if the node to remove is the root, we can just update root to be the child
             root = child;
+            if (child != nullptr) {
+                child->parent = nullptr; //update the parent pointer of the child to null since it is now the root
+            }
         } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can update the left child of the parent to be the child
             parent->left = child;
         } else { //else, 
@@ -141,6 +145,7 @@ void CardList::remove(const Card& card) {
             child->parent = parent;
         }
         delete curr; //delete the node to remove
+        return;
     }
 
     //CASE THREE: The node has two children, so we replace the current node with its in-order successor
@@ -166,7 +171,8 @@ void CardList::remove(const Card& card) {
         if (child != nullptr) {
             child->parent = successorParent;
         }
-        delete successor; //delete the successor node}
+        delete successor; //delete the successor node
+        return;
 
     }
 
@@ -215,7 +221,7 @@ const Card& Iterator::operator*() const {
 }
 
 const Card* Iterator::operator->() const {
-    return &(curr->data);
+    return curr ? &(curr->data) : nullptr; //return pointer to data if curr is not null, else return null
 }
 
 CardNode* Iterator::successor(CardNode* node) {
