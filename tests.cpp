@@ -51,7 +51,7 @@ void testmultiple_nodes() {
 }
 //test five for contains method
 void test_traversal() {
-    CardList bst;
+    CardList list;
 
     Card c1('c', 2);
     Card c2('c', 5);
@@ -59,15 +59,15 @@ void test_traversal() {
     Card c4('c', 'j');
     Card target('c', 'k');
 
-    bst.insert(c1);
-    bst.insert(c2);
-    bst.insert(c3);
-    bst.insert(c4);
+    list.insert(c1);
+    list.insert(c2);
+    list.insert(c3);
+    list.insert(c4);
 
-    assert(bst.contains(target) == false);
+    assert(list.contains(target) == false);
 }
 
-
+//test case one for insertion
 void testinsertion_basic() {
     CardList list;
 
@@ -76,7 +76,8 @@ void testinsertion_basic() {
 
     assert(list.contains(c));
 }
-
+//**TEST CASE TWO for insertion
+//DOUBLE CHECK ON STUFF REGARDING DUPLICATES OR NAH
 void test_inserting_duplicate() {
     CardList list;
 
@@ -86,9 +87,57 @@ void test_inserting_duplicate() {
 
     assert(list.contains(c));
 }
+//test case three for insertion
+void testinserting_All_Left() {
+    CardList list;
 
-//edge case for removal
+    Card root('s', 10); 
+    Card left('h', 9);
+    Card left_2('c', 8);
 
+    list.insert(root);
+    list.insert(left);
+    list.insert(left_2);
+
+    assert(list.contains(left_2));
+}
+//test case four for insertion, same stuff as all left but now,
+//yk, all right
+void testinserting_All_Right() {
+    CardList list;
+
+    Card root('s', 10);
+    Card right('h', 11);
+    Card right_2('c', 12);
+
+    list.insert(root);
+    list.insert(right);
+    list.insert(right_2);
+
+    assert(list.contains(right_2));
+}
+
+//test case five for insertion:
+//couldve been an earlier test case since everything by now should work
+//but we needed to reach the minimum of five test cases so idc
+void testinsertionS() {
+    CardList list;
+
+    Card c1('s', 7);
+    Card c2('h', 3);
+    Card c3('d', 10);
+
+    list.insert(c1);
+    list.insert(c2);
+    list.insert(c3);
+
+    assert(list.contains(c1));
+    assert(list.contains(c2));
+    assert(list.contains(c3));
+}
+
+
+//edge case/case one for removal
 void test_empty_tree() {
     CardList list;
 
@@ -96,7 +145,7 @@ void test_empty_tree() {
     list.remove(c); // should not crash
 }
 
-//the leaf
+//the leaf/case two for removal
 void test_remove_leaf() {
     CardList list;
 
@@ -110,7 +159,84 @@ void test_remove_leaf() {
 
     assert(!list.contains(leaf));
 }
+//test case three for removal
+void test_removeChild() {
+    CardList list;
 
+    Card c1('s', 10);
+    Card c2('h', 5);
+    Card c3('c', 3);
+
+    list.insert(c1);
+    list.insert(c2);
+    list.insert(c3);
+
+    list.remove(c2);
+
+    assert(!list.contains(c2));
+    assert(list.contains(c3));
+}
+//test case four for removal
+void test_remove_2_child() {
+    CardList list;
+
+    Card c1('s', 10);
+    Card c2('h', 5);
+    Card c3('c', 15);
+    Card c4('d', 12);
+    Card c5('s', 20);
+
+    list.insert(c1);
+    list.insert(c2);
+    list.insert(c3);
+    list.insert(c4);
+    list.insert(c5);
+
+    list.remove(c3);
+
+    assert(!list.contains(c3));
+    assert(list.contains(c4));
+    assert(list.contains(c5));
+}
+//test case five for removal
+void test_removeRoot() {
+    CardList list;
+
+    Card c1('s', 10);
+    Card c2('h', 5);
+    Card c3('c', 15);
+
+    list.insert(c1);
+    list.insert(c2);
+    list.insert(c3);
+
+    list.remove(c1);
+
+    assert(!list.contains(c1));
+    assert(list.contains(c2));
+    assert(list.contains(c3));
+}
+void test_remove_DNE() {
+    CardList list;
+
+    Card c1('s', 10);
+    Card c2('h', 5);
+    Card c3('c', 7);
+
+    list.insert(c1);
+    list.insert(c2);
+
+    
+    list.remove(c3);
+
+    
+    assert(list.contains(c1));
+    assert(list.contains(c2));
+
+    
+    assert(!list.contains(c3));
+}
+//test case one for printing
 void test_print_basic() {
     CardList list;
 
@@ -121,7 +247,7 @@ void test_print_basic() {
     cout << "Expected sorted output: 5 10 15" << endl;
     list.printInOrder();
 }
-
+//an extra edge case to consider...
 void test_ordering_suit_priority() {
     CardList list;
 
@@ -134,3 +260,4 @@ void test_ordering_suit_priority() {
     assert(list.contains(clubs));
     assert(list.contains(diamonds));
 }
+
