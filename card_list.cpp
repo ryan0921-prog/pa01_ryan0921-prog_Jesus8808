@@ -238,7 +238,7 @@ Iterator& Iterator::operator++() {
         //case two if we go up
         else {
             CardNode* newParent = curr-> parent;
-            while (newParent && curr == parent->right) {
+            while (newParent && curr == newParent->right) {
                 curr = newParent;
                 newParent = newParent->parent;
             }
@@ -250,4 +250,43 @@ Iterator& Iterator::operator++() {
 }
 
 
+Iterator Iterator::operator++(int) {
+    Iterator temp = *this; //store the current iterator in a temp variable
+    ++(*this); //use the pre-increment to move to the next node
+    return temp; //return the original iteraotor
+}
 
+Iterator& Iterator::operator--() {
+    //same thing as the increment operator, but now reverse traversal
+    if (!curr) {
+        return *this;
+
+    }
+    //same thing for case one
+
+    if (curr->left) {
+        curr = curr->left;
+        while(curr->right) {
+            curr = curr->right;
+        }
+
+        //case two
+        else {
+            CardNode* newParent = curr->parent;
+            while (newParent && curr == newParent->left) {
+                curr = newParent;
+                newParent = newParent->parent;
+            }
+
+            curr = parent;
+        }
+        return *this;
+    }
+}
+
+
+Iterator Iterator::operator--(int) {
+    Iterator temp = *this; //store the current iterator in a temp variable
+    --(*this); //use the pre-decrement to move to the previous node
+    return temp; //return the original iterator
+}
