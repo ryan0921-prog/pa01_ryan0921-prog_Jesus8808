@@ -34,11 +34,18 @@ public:
     void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
     void inOrderHelper(CardNode* node) const; //helper function to print stuff in order usng recursion.
 
-    CardNode* findMin(CardNode* node) const;
-    CardNode* findMax(CardNode* node) const;
+    Iterator begin() const;
+    Iterator end() const;
+
+    Iterator rbegin() const;
+    Iterator rend() const;
+
+    
 
 
 private:
+    CardNode* findMin(CardNode* node) const;
+    CardNode* findMax(CardNode* node) const;
     CardNode* root;  //pointer to the root of the BST
 };
 
@@ -48,7 +55,7 @@ private:
 
 
 public:
-    Iterator(CardNode* root);
+    Iterator(CardNode* node);
 
     Card& operator*();
     Card* operator->();
