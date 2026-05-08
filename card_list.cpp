@@ -302,3 +302,65 @@ bool Iterator::operator==(const Iterator& other) const {
 bool Iterator::operator!=(const Iterator& other) const {
     return curr != other.curr; //two iterators are not equal if they point to different nodes
 }
+
+
+void playGame(CardList& aliceHand, CardList& bobHand) {
+    bool founditsmatch = true; //boolean to keep track of if we found a match or not, if we found a match, we can end the game
+
+    while (founditsmatch) {
+        founditsmatch = false; //reset boolean at start of eaxch round
+
+        //alice goes forward
+
+        for (auto al_it = aliceHand.begin(); al_it != aliceHand.end(); ++al_it) {
+
+
+            Card aliceCard = *al_it; //get the current card from alice's hand
+            if (bobHand.contains(aliceCard)) {
+                std::cout << "Alice picked matching card " << aliceCard <<std::endl;
+
+                aliceHand.remove(aliceCard); //removes the matching card
+                bobHand.remove(aliceCard); //removes the matching card
+
+                founditsmatch = true;  //reset it
+                break; ///dip
+            }
+        }
+
+        if (founditsmatch) {
+            continue;  //restart loop
+        }
+
+
+        //now for bob, but reversed
+        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); --bob_it) {
+            Card bobCard = *bob_it;
+
+            if (aliceHand.contains(bobCard)) {
+                std::cout << "Bob picked matching card " << bobCard <<std::endl;
+
+                bobHand.remove(bobCard); //removes the matching card
+                aliceHand.remove(bobCard); //removes the matching card
+
+                founditsmatch  = true;  //reset it
+                break;  //dip
+            }
+
+            
+        }
+    }
+
+    //now we print the final hands
+
+    std::cout << "Alice's cards: " << std::endl;  //header
+    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {  //traverse
+        std::cout << *it << std::endl;
+    }
+    std::cout << "\n";
+//same thing for bob
+    std::cout << "Bob's cards: " << std::endl;
+    for (auto it = bobHand.begin(); it != bobHand.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
+
+}

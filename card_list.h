@@ -72,6 +72,6 @@ public:
     bool operator!=(const Iterator& other) const;
 };
 
-
+void playGame(CardList& aliceHand, CardList& bobHand);
 
 #endif
