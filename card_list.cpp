@@ -135,7 +135,9 @@ void CardList::remove(const Card& card) {
         } else { //else, 
             parent->right = child;
         }
-        child->parent = parent; //update the parent pointer 
+        if (child != nullptr) {
+            child->parent = parent;
+        }
         delete curr; //delete the node to remove
     }
 
@@ -223,31 +225,52 @@ Card* Iterator::operator->() {
     return &(curr->data);
 }
 
+CardNode* Iterator::successor(CardNode* node) {
+    if (!node) {
+        return nullptr;
+    }
+    
+    if (node->right) { //if the node has a right child, the successor is the leftmost node in the right subtree
+        node = node->right;
+        while (node->left) {
+            node = node->left;
+    }
+    return node;
+    } else { //else, the successor is the lowest ancestor of the node whose left child is also an ancestor of the node
+        CardNode* parent = node->parent;
+        while (parent && node == parent->right) {
+            node = parent;
+            parent = parent->parent;
+        }
+        return parent;
+    }
+}
 
+CardNode* Iterator::predecessor(CardNode* node) {
+    if (!node) {
+        return nullptr;
+    }
+    
+    if (node->left) { //if the node has a left child, the predecessor is the rightmost node in the left subtree
+        node = node->left;
+        while (node->right) {
+            node = node->right;
+        }
+        return node;
+    } else { //else, the predecessor is the lowest ancestor of the node whose right child is also an ancestor of the node
+        CardNode* parent = node->parent;
+        while (parent && node == parent->left) {
+            node = parent;
+            parent = parent->parent;
+        }
+        return parent;
+    }
+}
 Iterator& Iterator::operator++() {
-    if (!curr) {
-        return *this;
-    }
+    curr = successor(curr); //move the current node to its successor
+    return *this; //return the updated iterator
 
-    //case one for it got a right subtree
-    if (curr->right) {
-        curr = curr->right;
-        while (curr->left) {
-            curr = curr->left;
-        }
-    }
-        //case two if we go up
-        else {
-            CardNode* newParent = curr-> parent;
-            while (newParent && curr == newParent->right) {
-                curr = newParent;
-                newParent = newParent->parent;
-            }
-
-            curr = newParent;
-        }
-
-        return *this;
+    
     
 }
 
@@ -260,30 +283,8 @@ Iterator Iterator::operator++(int) {
 
 Iterator& Iterator::operator--() {
     //same thing as the increment operator, but now reverse traversal
-    if (!curr) {
-        return *this;
-
-    }
-    //same thing for case one
-
-    if (curr->left) {
-        curr = curr->left;
-        while(curr->right) {
-            curr = curr->right;
-        }
-    }
-
-        //case two
-        else {
-            CardNode* newParent = curr->parent;
-            while (newParent && curr == newParent->left) {
-                curr = newParent;
-                newParent = newParent->parent;
-            }
-
-            curr = newParent;
-        }
-        return *this;
+    curr = predecessor(curr); //move the current node to its predecessor
+    return *this; //return the updated iterator
     
 }
 

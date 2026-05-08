@@ -53,6 +53,9 @@ class Iterator {
 private:
     CardNode* curr;
 
+    CardNode* successor(CardNode* node);
+    CardNode* predecessor(CardNode* node);
+
 
 public:
     Iterator(CardNode* node);
