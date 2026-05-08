@@ -13,7 +13,7 @@ public:
     Card(char s, char v); 
 
     void setSuit(char s);
-    char getSuit() const;
+    int getSuit() const;
 
     //void setValue(int v);
     int getValue() const;

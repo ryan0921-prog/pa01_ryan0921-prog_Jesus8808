@@ -39,7 +39,7 @@ void Card::setSuit(char s){
     }
 }
 
-char Card::getSuit() const{
+int Card::getSuit() const{
     return suit; 
 }
 

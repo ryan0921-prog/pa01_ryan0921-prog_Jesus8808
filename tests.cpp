@@ -1,13 +1,15 @@
 #include <iostream>
 #include "card_list.h"
+#include "card_list.cpp"
 #include <cassert>
 #include "card.h"
+#include "card.cpp"
 
 
 using namespace std;
 
 //test case one for contains method
-void test_empty_tree() {
+void test_Cempty_tree() {
     CardList list;
     Card c('h', 10); 
     assert(list.contains(c) == false);
@@ -56,8 +58,8 @@ void test_traversal() {
     Card c1('c', 2);
     Card c2('c', 5);
     Card c3('c', 8);
-    Card c4('c', 'j');
-    Card target('c', 'k');
+    Card c4('c', 9);
+    Card target('c', 3);
 
     list.insert(c1);
     list.insert(c2);
@@ -83,9 +85,11 @@ void test_inserting_duplicate() {
 
     Card c('h', 7);
     list.insert(c);
-    list.insert(c); 
+    list.insert(c);
 
     assert(list.contains(c));
+    list.remove(c);
+    assert(!list.contains(c)); 
 }
 //test case three for insertion
 void testinserting_All_Left() {
@@ -244,8 +248,9 @@ void test_print_basic() {
     list.insert(Card('s', 2));
     list.insert(Card('d', 5));
 
-    cout << "Expected sorted output: 5 10 15" << endl;
+    cout << "Expected sorted output: 2 5 9" << endl;
     list.printInOrder();
+    cout << endl;
 }
 //an extra edge case to consider...
 void test_ordering_suit_priority() {
@@ -261,3 +266,28 @@ void test_ordering_suit_priority() {
     assert(list.contains(diamonds));
 }
 
+int main() {
+    test_Cempty_tree();
+    test_singlenode_found();
+    test_singlenode_not_found();
+    testmultiple_nodes();
+    test_traversal();
+
+    testinsertion_basic();
+    test_inserting_duplicate();
+    testinserting_All_Left();
+    testinserting_All_Right();
+    testinsertionS();
+
+    test_remove_leaf();
+    test_removeChild();
+    test_remove_2_child();
+    test_removeRoot();
+    test_remove_DNE();
+
+    test_print_basic();
+    test_ordering_suit_priority();
+
+    cout << "All tests passed!" << endl;
+    return 0;
+}
