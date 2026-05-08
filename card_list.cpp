@@ -70,7 +70,7 @@ void CardList::insert(const Card& card) {
 void CardList::inOrderHelper(CardNode* node) const {
     if (node != nullptr) { //if the node is not null, we can continue traversing
         inOrderHelper(node->left); //traverse left
-        std::cout << node->data.getSuit() << node->data.getValue() << " "; //print the current node's data using some our getters
+        std::cout << node->data << " ";
         inOrderHelper(node->right); //traverse right
     }
 }

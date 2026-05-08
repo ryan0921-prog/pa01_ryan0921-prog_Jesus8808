@@ -6,14 +6,14 @@
 
 using namespace std;
 
-
+//test case one for contains method
 void test_empty_tree() {
     CardList list;
     Card c('h', 10); 
     assert(list.contains(c) == false);
 }
 
-
+//test two for contains method
 void test_singlenode_found() {
     CardList list;
 
@@ -23,7 +23,7 @@ void test_singlenode_found() {
     assert(list.contains(c) == true);
 }
 
-
+//test three for contains method
 void test_singlenode_not_found() {
     CardList list;
 
@@ -34,7 +34,7 @@ void test_singlenode_not_found() {
 
     assert(list.contains(c2) == false);
 }
-
+//test four for contains method
 void testmultiple_nodes() {
     CardList list;
 
@@ -48,6 +48,23 @@ void testmultiple_nodes() {
 
     assert(list.contains(c2));
     assert(list.contains(c3));
+}
+//test five for contains method
+void test_traversal() {
+    CardList bst;
+
+    Card c1('c', 2);
+    Card c2('c', 5);
+    Card c3('c', 8);
+    Card c4('c', 'j');
+    Card target('c', 'k');
+
+    bst.insert(c1);
+    bst.insert(c2);
+    bst.insert(c3);
+    bst.insert(c4);
+
+    assert(bst.contains(target) == false);
 }
 
 
