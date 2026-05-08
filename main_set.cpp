@@ -52,14 +52,42 @@ int main(int argv, char** argc){
     bobHand.insert(newCard);
   }
   cardFile2.close();
-  
+
+  long unsigned int i = 0;
+  while (aliceHand.size() > 0 && bobHand.size() > 0 && i < aliceHand.size()){
+    
+    for (Card x : aliceHand){
+      if (bobHand.contains(x)){
+        cout << "Alice picked matching card " << x << "\n";
+        aliceHand.erase(x);
+        bobHand.erase(x);
+        i = 0;
+        break;
+      }
+      i++;
+    } 
+
+    for (auto it = bobHand.rbegin(); it != bobHand.rend(); ++it){
+      if (aliceHand.contains(*it)){
+        cout << "Bob picked matching card " << *it << "\n";
+        aliceHand.erase(*it);
+        bobHand.erase(*it);
+        i = 0;
+        break; 
+      }
+      i++;
+    }
+  }
+
+  cout << "Alice's cards:\n";
   for (Card x : aliceHand){
     cout << x << "\n"; 
-  } cout << "\n"; 
+  } cout << endl; 
 
+  cout << "Bob's cards:\n";
   for (Card x : bobHand){
     cout << x << "\n";
-  } cout << "\n";
-  return 0;
+  } cout << endl; 
+
 }
 

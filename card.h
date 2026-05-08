@@ -15,7 +15,7 @@ public:
     void setSuit(char s);
     char getSuit() const;
 
-    //void setValue(int v);
+    void setValue(int v);
     int getValue() const;
 
     //non-numerical values 

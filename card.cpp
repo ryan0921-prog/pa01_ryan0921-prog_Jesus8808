@@ -8,10 +8,10 @@ Card::Card(){
     value = 0; 
 }
 
-Card::Card(char s, int v){
+/*Card::Card(char s, int v){
     setSuit(s);
     value = v; 
-}
+}*/
 
 //non-numerical constrcutor
 Card::Card(char s, char v){
@@ -43,10 +43,10 @@ char Card::getSuit() const{
     return suit; 
 }
 
-//value 
-/*void Card::setValue(int v){
+
+void Card::setValue(int v){
     value = v; 
-}*/
+}
 
 void Card::setValue(char v){
     switch(v){
