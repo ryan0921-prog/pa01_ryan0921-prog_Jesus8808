@@ -217,11 +217,11 @@ Iterator::Iterator(CardNode* node) {
     curr = node;
 }
 
-Card& Iterator::operator*() {
+const Card& Iterator::operator*() const {
     return curr->data;
 }
 
-Card* Iterator::operator->() {
+const Card* Iterator::operator->() const {
     return &(curr->data);
 }
 

@@ -18,6 +18,28 @@ struct CardNode {
 
 
 };
+class Iterator {
+private:
+    CardNode* curr;
+
+    CardNode* successor(CardNode* node);
+    CardNode* predecessor(CardNode* node);
+
+
+public:
+    Iterator(CardNode* node);
+
+    const Card& operator*() const;
+    const Card* operator->() const;
+
+    Iterator& operator++(); //forward traversal, pre-increment
+    Iterator operator++(int); //forward traversal, post-increment
+    Iterator& operator--(); //reverse traversal, pre-decrement
+    Iterator operator--(int); //reverse traversal, post-decrement
+
+    bool operator==(const Iterator& other) const;
+    bool operator!=(const Iterator& other) const;
+};
 
 //now we create our card list class which is the player's hand in the BST
 class CardList {
@@ -49,28 +71,7 @@ private:
     CardNode* root;  //pointer to the root of the BST
 };
 
-class Iterator {
-private:
-    CardNode* curr;
 
-    CardNode* successor(CardNode* node);
-    CardNode* predecessor(CardNode* node);
-
-
-public:
-    Iterator(CardNode* node);
-
-    Card& operator*();
-    Card* operator->();
-
-    Iterator& operator++(); //forward traversal, pre-increment
-    Iterator operator++(int); //forward traversal, post-increment
-    Iterator& operator--(); //reverse traversal, pre-decrement
-    Iterator operator--(int); //reverse traversal, post-decrement
-
-    bool operator==(const Iterator& other) const;
-    bool operator!=(const Iterator& other) const;
-};
 
 void playGame(CardList& aliceHand, CardList& bobHand);
 
