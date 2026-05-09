@@ -330,8 +330,9 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
             if (bobHand.contains(aliceCard)) {
                 std::cout << "Alice picked matching card " << aliceCard << std::endl;
 
-                aliceHand.remove(aliceCard);
                 bobHand.remove(aliceCard);
+                aliceHand.remove(aliceCard);
+                
 
                 founditsmatch = true;
                 break;
@@ -346,8 +347,9 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
             if (aliceHand.contains(bobCard)) {
                 std::cout << "Bob picked matching card " << bobCard << std::endl;
 
-                bobHand.remove(bobCard);
                 aliceHand.remove(bobCard);
+                bobHand.remove(bobCard);
+                
 
                 founditsmatch = true;
                 break;

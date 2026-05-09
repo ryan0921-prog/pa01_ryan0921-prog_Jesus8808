@@ -64,6 +64,7 @@ void Card::setValue(char v){
 
         case 'k':
         value = 13; 
+        break;
 
         default:
         value = v - '0'; 
