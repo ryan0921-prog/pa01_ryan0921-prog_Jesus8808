@@ -122,8 +122,7 @@ void testinserting_All_Right() {
 }
 
 //test case five for insertion:
-//couldve been an earlier test case since everything by now should work
-//but we needed to reach the minimum of five test cases so idc
+
 void testinsertionS() {
     CardList list;
 
@@ -252,7 +251,20 @@ void test_print_basic() {
     list.printInOrder();
     cout << endl;
 }
-//an extra edge case to consider...
+
+void test_print_in_order() {
+    CardList list;
+
+    list.insert(Card('h', 9));
+    list.insert(Card('s', 2));
+    list.insert(Card('d', 5));
+    list.insert(Card('c', 7));
+
+    cout << "Expected sorted output: 2 5 7 9" << endl;
+    list.printInOrder();
+    cout << endl;
+}
+//an extra edge case to consider
 void test_ordering_suit_priority() {
     CardList list;
 
@@ -278,6 +290,7 @@ int main() {
     testinserting_All_Left();
     testinserting_All_Right();
     testinsertionS();
+    test_empty_tree();
 
     test_remove_leaf();
     test_removeChild();
@@ -286,6 +299,7 @@ int main() {
     test_remove_DNE();
 
     test_print_basic();
+    test_print_in_order();
     test_ordering_suit_priority();
 
     cout << "All tests passed!" << endl;

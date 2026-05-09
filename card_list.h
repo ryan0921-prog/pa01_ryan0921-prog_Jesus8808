@@ -53,8 +53,7 @@ public:
     void printInOrder() const; //this will prin the cards in order from least to greatest.
 
 
-    void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
-    void inOrderHelper(CardNode* node) const; //helper function to print stuff in order usng recursion.
+    
 
     Iterator begin() const;
     Iterator end() const;
@@ -66,8 +65,9 @@ public:
 
 
 private:
-    CardNode* findMin(CardNode* node) const;
-    CardNode* findMax(CardNode* node) const;
+    void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
+    void inOrderHelper(CardNode* node) const; //helper function to print stuff in order usng recursion.
+    
     CardNode* root;  //pointer to the root of the BST
 };
 

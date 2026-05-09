@@ -18,6 +18,7 @@ void CardList::clear(CardNode* node) {
 
 CardList::~CardList() { //destructor to clear the tree
     clear(root);
+    root = nullptr;  //prevent any dangling pointers
 }
 
 
@@ -37,6 +38,10 @@ bool CardList::contains(const Card& card) const {
 }
 //might have to change this function later, but for now it is what it is smh :)
 void CardList::insert(const Card& card) {
+    //check for duplicates first 
+    if (contains(card)) {
+        return;  //prevents insertion of duplicates
+    }
     if (root == nullptr) { //if the tree is empty, we can just set the root to be the new node
         root = new CardNode(card);
         return;
@@ -72,23 +77,21 @@ void CardList::insert(const Card& card) {
 void CardList::inOrderHelper(CardNode* node) const {
     if (node != nullptr) { //if the node is not null, we can continue traversing
         inOrderHelper(node->left); //traverse left
-        std::cout << node->data << " ";
+        std::cout << node->data << std::endl;  //one card per line like format
         inOrderHelper(node->right); //traverse right
     }
 }
 
 void CardList::printInOrder() const {
     inOrderHelper(root); //call the helper function starting from the root
-    std::cout << std::endl; //print a new line after printing all cards, like the formatting I believe
+    
 }
 
 
 //** ADD THE ITERARORS AND ITS CLASS
 
 void CardList::remove(const Card& card) {
-    if (!contains(card)) { //if the card is not in the tree, we can just return
-        return;
-    }
+    
 
     //We will need to first first the node to remove
     //then we can deal with three cases: Leaf node, one child node, and two child node
@@ -138,12 +141,17 @@ void CardList::remove(const Card& card) {
             }
         } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can update the left child of the parent to be the child
             parent->left = child;
+            if (child != nullptr) {
+                child->parent = parent; //update the parent pointer of the child to its new parent
+            }
         } else { //else, 
             parent->right = child;
+            if (child != nullptr) {
+                child->parent = parent; //update the parent pointer of the child to its new parent
+            }
+
         }
-        if (child != nullptr) {
-            child->parent = parent;
-        }
+        
         delete curr; //delete the node to remove
         return;
     }
@@ -159,13 +167,13 @@ void CardList::remove(const Card& card) {
         }
         curr->data = successor->data;//similar tp lab3, replace data from current with successor data
         //from here on out it is similar to previous cases
-        //this section is from case one kind of
+        //this section is from case one kind of, but with a slght difference for clarity
         CardNode* child = successor->right;
-        if (successorParent->left == successor) {
-            successorParent->left = child;
+        if (successorParent == curr) { 
+            successorParent->right = child;
         }
         else {
-            successorParent->right = child;
+            successorParent->left = child;
         }
 
         if (child != nullptr) {
@@ -217,6 +225,12 @@ Iterator::Iterator(CardNode* node) {
 }
 
 const Card& Iterator::operator*() const {
+    static Card failure;  //STATIC means only printed once, 
+    //this is something I had to look up in case I ran into a nullptr
+    //although it might not be necessary.
+    /*if (!curr) {
+        return failure;
+    }*/
     return curr->data;
 }
 
@@ -304,68 +318,59 @@ bool Iterator::operator!=(const Iterator& other) const {
 
 
 void playGame(CardList& aliceHand, CardList& bobHand) {
-    bool founditsmatch = true; //boolean to keep track of if we found a match or not, if we found a match, we can end the game
+    while (true) {
 
-    while (founditsmatch) {
-        founditsmatch = false; //reset boolean at start of eaxch round
+        bool founditsmatch = false; // reset each round
 
-        //alice goes forward
-
+        //alice's turn
         for (auto al_it = aliceHand.begin(); al_it != aliceHand.end(); ++al_it) {
 
+            Card aliceCard = *al_it;
 
-            Card aliceCard = *al_it; //get the current card from alice's hand
             if (bobHand.contains(aliceCard)) {
-                std::cout << "Alice picked matching card " << aliceCard <<std::endl;
+                std::cout << "Alice picked matching card " << aliceCard << std::endl;
 
-                auto old_al_it = al_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
-                 ++al_it; //move the iterator to the next card before we remove the current card
+                bobHand.remove(aliceCard);
+                aliceHand.remove(aliceCard);
+                
 
-                aliceHand.remove(aliceCard); //removes the matching card
-                bobHand.remove(aliceCard); //removes the matching card
-
-                founditsmatch = true;  //reset it
-                break; ///dip
+                founditsmatch = true;
+                break;
             }
         }
 
-        if (founditsmatch) {
-            continue;  //restart loop
-        }
+        //bob's turn
+        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); bob_it--) {
 
-
-        //now for bob, but reversed
-        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); --bob_it) {
             Card bobCard = *bob_it;
 
             if (aliceHand.contains(bobCard)) {
-                std::cout << "Bob picked matching card " << bobCard <<std::endl;
+                std::cout << "Bob picked matching card " << bobCard << std::endl;
 
-                bobHand.remove(bobCard); //removes the matching card
-                aliceHand.remove(bobCard); //removes the matching card
+                aliceHand.remove(bobCard);
+                bobHand.remove(bobCard);
+                
 
-                auto old_bob_it = bob_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
-                --bob_it; //move the iterator to the previous card before we remove the current card
-
-                founditsmatch  = true;  //reset it
-                break;  //dip
+                founditsmatch = true;
+                break;
             }
+        }
 
-            
+        //break condition
+        if (!founditsmatch) {
+            break; // no matches this round, ggs
         }
     }
 
-    //now we print the final hands
-
-    std::cout << "Alice's cards: " << std::endl;  //header
-    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {  //traverse
+    //print what is left
+    std::cout << "\n";
+    std::cout << "Alice's cards:\n";
+    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {
         std::cout << *it << std::endl;
     }
-    std::cout << "\n";
-//same thing for bob
-    std::cout << "Bob's cards: " << std::endl;
+
+    std::cout << "\nBob's cards:\n";
     for (auto it = bobHand.begin(); it != bobHand.end(); ++it) {
         std::cout << *it << std::endl;
     }
-
 }

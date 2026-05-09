@@ -27,12 +27,49 @@ int main(int argv, char** argc){
 
   //Read each file
   while (getline (cardFile1, line) && (line.length() > 0)){
+    Card newCard;
+    
 
+
+    if (line.size() == 4){
+      newCard.setSuit(line[0]);
+      newCard.setValue(10);
+
+      
+      aliceHand.insert(newCard);
+    }
+    else {
+      newCard.setSuit(line[0]);
+      newCard.setValue(line[2]);
+
+      
+      aliceHand.insert(newCard);
+    }
   }
   cardFile1.close();
 
 
   while (getline (cardFile2, line) && (line.length() > 0)){
+    Card newCard;
+    
+
+
+    if (line.size() == 4){
+      newCard.setSuit(line[0]);
+      newCard.setValue(10);
+
+      
+      bobHand.insert(newCard);
+    }
+    else {
+      newCard.setSuit(line[0]);
+      newCard.setValue(line[2]);
+
+      
+      bobHand.insert(newCard);
+    }
+    
+    
 
   }
   cardFile2.close();
