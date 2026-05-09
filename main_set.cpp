@@ -85,8 +85,7 @@ int main(int argv, char** argc){
   }
 
   //print hands 
-  if (i == aliceHand.size()) cout << "\n";
-  cout << "Alice's cards:\n";
+  cout << "\nAlice's cards:\n";
   for (Card x : aliceHand){
     cout << x << "\n"; 
   } cout << endl; 
@@ -94,7 +93,7 @@ int main(int argv, char** argc){
   cout << "Bob's cards:\n";
   for (Card x : bobHand){
     cout << x << "\n";
-  } cout << endl; 
+  }
 
 }
 
