@@ -141,8 +141,15 @@ void CardList::remove(const Card& card) {
             }
         } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can update the left child of the parent to be the child
             parent->left = child;
+            if (child != nullptr) {
+                child->parent = parent; //update the parent pointer of the child to its new parent
+            }
         } else { //else, 
             parent->right = child;
+            if (child != nullptr) {
+                child->parent = parent; //update the parent pointer of the child to its new parent
+            }
+
         }
         if (child != nullptr) {
             child->parent = parent;
@@ -162,13 +169,13 @@ void CardList::remove(const Card& card) {
         }
         curr->data = successor->data;//similar tp lab3, replace data from current with successor data
         //from here on out it is similar to previous cases
-        //this section is from case one kind of
+        //this section is from case one kind of, but with a slght difference for clarity
         CardNode* child = successor->right;
-        if (successorParent->left == successor) {
-            successorParent->left = child;
+        if (successorParent == curr) { 
+            successorParent->right = child;
         }
         else {
-            successorParent->right = child;
+            successorParent->left = child;
         }
 
         if (child != nullptr) {
