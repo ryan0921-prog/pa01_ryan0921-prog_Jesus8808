@@ -220,6 +220,11 @@ Iterator::Iterator(CardNode* node) {
 }
 
 const Card& Iterator::operator*() const {
+    static Card failure;  //STATIC means only printed once, 
+    //this is something I had to look up in case I ran into a nullptr
+    if (!curr) {
+        return failure;
+    }
     return curr->data;
 }
 
@@ -307,68 +312,56 @@ bool Iterator::operator!=(const Iterator& other) const {
 
 
 void playGame(CardList& aliceHand, CardList& bobHand) {
-    bool founditsmatch = true; //boolean to keep track of if we found a match or not, if we found a match, we can end the game
+    while (true) {
 
-    while (founditsmatch) {
-        founditsmatch = false; //reset boolean at start of eaxch round
+        bool founditsmatch = false; // reset each round
 
-        //alice goes forward
-
+        //alice's turn
         for (auto al_it = aliceHand.begin(); al_it != aliceHand.end(); ++al_it) {
 
+            Card aliceCard = *al_it;
 
-            Card aliceCard = *al_it; //get the current card from alice's hand
             if (bobHand.contains(aliceCard)) {
-                std::cout << "Alice picked matching card " << aliceCard <<std::endl;
+                std::cout << "Alice picked matching card " << aliceCard << std::endl;
 
-               
-                
+                aliceHand.remove(aliceCard);
+                bobHand.remove(aliceCard);
 
-                aliceHand.remove(aliceCard); //removes the matching card
-                bobHand.remove(aliceCard); //removes the matching card
-
-                founditsmatch = true;  //reset it
-                break; ///dip
+                founditsmatch = true;
+                break;
             }
         }
 
-        if (founditsmatch) {
-            continue;  //restart loop
-        }
+        //bob's turn
+        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); bob_it++) {
 
-
-        //now for bob, but reversed
-        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); --bob_it) {
             Card bobCard = *bob_it;
 
             if (aliceHand.contains(bobCard)) {
-                std::cout << "Bob picked matching card " << bobCard <<std::endl;
+                std::cout << "Bob picked matching card " << bobCard << std::endl;
 
-                bobHand.remove(bobCard); //removes the matching card
-                aliceHand.remove(bobCard); //removes the matching card
+                bobHand.remove(bobCard);
+                aliceHand.remove(bobCard);
 
-                
-                
-
-                founditsmatch  = true;  //reset it
-                break;  //dip
+                founditsmatch = true;
+                break;
             }
+        }
 
-            
+        //break condition
+        if (!founditsmatch) {
+            break; // no matches this round, ggs
         }
     }
 
-    //now we print the final hands
-
-    std::cout << "Alice's cards: " << std::endl;  //header
-    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {  //traverse
+    //print what is left
+    std::cout << "Alice's cards:\n";
+    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {
         std::cout << *it << std::endl;
     }
-    std::cout << "\n";
-//same thing for bob
-    std::cout << "Bob's cards: " << std::endl;
+
+    std::cout << "\nBob's cards:\n";
     for (auto it = bobHand.begin(); it != bobHand.end(); ++it) {
         std::cout << *it << std::endl;
     }
-
 }
