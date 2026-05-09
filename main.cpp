@@ -28,7 +28,7 @@ int main(int argv, char** argc){
   //Read each file
   while (getline (cardFile1, line) && (line.length() > 0)){
     char suit = line[0]; //for the suit value
-    int value = line[2]; //for the integer value
+    char value = line[2]; //for the integer value
     aliceHand.insert(Card(suit,value));
 
   }
@@ -37,7 +37,7 @@ int main(int argv, char** argc){
 
   while (getline (cardFile2, line) && (line.length() > 0)){
     char suit = line[0]; //for the suit value
-    int value = line[2]; //for the integer value
+    char value = line[2]; //for the integer value
     bobHand.insert(Card(suit,value));
 
   }
