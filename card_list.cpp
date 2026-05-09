@@ -363,6 +363,7 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
     }
 
     //print what is left
+    std::cout << "\n";
     std::cout << "Alice's cards:\n";
     for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {
         std::cout << *it << std::endl;
