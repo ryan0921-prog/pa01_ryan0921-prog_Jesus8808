@@ -37,9 +37,8 @@ bool CardList::contains(const Card& card) const {
 }
 //might have to change this function later, but for now it is what it is smh :)
 void CardList::insert(const Card& card) {
-    CardNode* newNode = new CardNode(card); //create a new node with the card data
-    if (root == nullptr) { //if the tree is empty, then root is ther new node
-        root = newNode;
+    if (root == nullptr) { //if the tree is empty, we can just set the root to be the new node
+        root = new CardNode(card);
         return;
     }
 
@@ -56,21 +55,24 @@ void CardList::insert(const Card& card) {
             curr = curr->right;
         }
     }
+    CardNode* newNode = new CardNode(card); //create a new node with the card data
+     newNode->parent = parent; //set the parent pointer of the new node
 
-    // This bit I had to look up, but we are inserting the new node as a childe of the parent node, i think
+
+    // This bit i took inspiration from previous lab.
     if (card < parent->data) { //if the card is less than parent's data, insert as left child
         parent->left = newNode;
     } else { //else, insert as right child
         parent->right = newNode;
     }
-    newNode->parent = parent; //set the parent pointer of the new node
+   
 }
 
 //I'm not sure if I used the getter functions correctly but ill figure it our later or tomorrow.
 void CardList::inOrderHelper(CardNode* node) const {
     if (node != nullptr) { //if the node is not null, we can continue traversing
         inOrderHelper(node->left); //traverse left
-        std::cout << node->data.getSuit() << node->data.getValue() << " "; //print the current node's data using some our getters
+        std::cout << node->data << " ";
         inOrderHelper(node->right); //traverse right
     }
 }
@@ -117,8 +119,9 @@ void CardList::remove(const Card& card) {
         }
 
         delete curr; //delete the node to remove
-        //curr = nullptr; might have to set curr to null, but i dont think so since we deleteing it. 
+        return;
     }
+
     
     //CASE TWO: if the node we want to delete has a child, left or right,
     //we can replace the current node with it's child and then delete the current node
@@ -130,52 +133,239 @@ void CardList::remove(const Card& card) {
 
         if (curr == root) { //if the node to remove is the root, we can just update root to be the child
             root = child;
+            if (child != nullptr) {
+                child->parent = nullptr; //update the parent pointer of the child to null since it is now the root
+            }
         } else if (curr == parent->left) { //if the node to remove is the left child of its parent, we can update the left child of the parent to be the child
             parent->left = child;
         } else { //else, 
             parent->right = child;
         }
-        child->parent = parent; //update the parent pointer 
+        if (child != nullptr) {
+            child->parent = parent;
+        }
         delete curr; //delete the node to remove
+        return;
     }
 
     //CASE THREE: The node has two children, so we replace the current node with its in-order successor
     //which is the smallest value that is greater than current node.
     else {
         CardNode* successor = curr->right; //start looking for the sucessor from child
+        CardNode* successorParent = curr; //keep track of the parent of the successor
         while (successor->left != nullptr) {
-            successor = successor->left;  //keep spamming left until we have reached the smallest value
-            //on its right side.
+            successorParent = successor; //update successor parent to current successor
+            successor = successor->left; //traverse left to find the smallest value in the right
         }
         curr->data = successor->data;//similar tp lab3, replace data from current with successor data
         //from here on out it is similar to previous cases
         //this section is from case one kind of
-        if (!successor->left && !successor->right) {
-            if (successor == successor->parent->left) {
-                successor->parent->left = nullptr;
-            } else {
-                successor->parent->right = nullptr;
-            }
-            delete successor;  //delete
+        CardNode* child = successor->right;
+        if (successorParent->left == successor) {
+            successorParent->left = child;
         }
         else {
-            //this is similar to case two.
-            CardNode* child = (successor->left) ? successor->left : successor->right; //get the one that has the child
-
-            if (successor == successor->parent->left) { //if the successor is the left child of its parent
-                successor->parent->left = child;
-            } else { //else, 
-                successor->parent->right = child;
-            }
-            if (child != nullptr) { //update the parent pointer
-                child->parent = successor->parent;
-            }
-            delete successor; //delete the successor node
+            successorParent->right = child;
         }
+
+        if (child != nullptr) {
+            child->parent = successorParent;
+        }
+        delete successor; //delete the successor node
+        return;
 
     }
 
 
 
+
+}
+
+Iterator CardList::begin() const {
+    CardNode* curr = root;
+    if (!curr) {
+        return Iterator(nullptr);
+
+    }
+    while(curr->left != nullptr) {
+        curr = curr-> left;
+    }
+    return Iterator(curr);
+}
+
+Iterator CardList::end() const {
+    return Iterator(nullptr);
+}
+//return largest node
+Iterator CardList::rbegin() const {
+    CardNode* curr = root;
+    if (!curr) {
+        return Iterator(nullptr);
+    }
+    while (curr->right != nullptr) {
+        curr = curr->right;
+    }
+
+    return Iterator(curr);
+}
+Iterator CardList::rend() const {
+    return Iterator(nullptr);
+}
+
+Iterator::Iterator(CardNode* node) {
+    curr = node;
+}
+
+const Card& Iterator::operator*() const {
+    return curr->data;
+}
+
+const Card* Iterator::operator->() const {
+    return curr ? &(curr->data) : nullptr; //return pointer to data if curr is not null, else return null
+}
+
+CardNode* Iterator::successor(CardNode* node) {
+    if (!node) {
+        return nullptr;
+    }
+    
+    if (node->right) { //if the node has a right child, the successor is the leftmost node in the right subtree
+        node = node->right;
+        while (node->left) {
+            node = node->left;
+    }
+    return node;
+    } else { //else, the successor is the lowest ancestor of the node whose left child is also an ancestor of the node
+        CardNode* parent = node->parent;
+        while (parent && node == parent->right) {
+            node = parent;
+            parent = parent->parent;
+        }
+        return parent;
+    }
+}
+
+CardNode* Iterator::predecessor(CardNode* node) {
+    if (!node) {
+        return nullptr;
+    }
+    
+    if (node->left) { //if the node has a left child, the predecessor is the rightmost node in the left subtree
+        node = node->left;
+        while (node->right) {
+            node = node->right;
+        }
+        return node;
+    } else { //else, the predecessor is the lowest ancestor of the node whose right child is also an ancestor of the node
+        CardNode* parent = node->parent;
+        while (parent && node == parent->left) {
+            node = parent;
+            parent = parent->parent;
+        }
+        return parent;
+    }
+}
+Iterator& Iterator::operator++() {
+    curr = successor(curr); //move the current node to its successor
+    return *this; //return the updated iterator
+
+    
+    
+}
+
+
+Iterator Iterator::operator++(int) {
+    Iterator temp = *this; //store the current iterator in a temp variable
+    ++(*this); //use the pre-increment to move to the next node
+    return temp; //return the original iteraotor
+}
+
+Iterator& Iterator::operator--() {
+    //same thing as the increment operator, but now reverse traversal
+    curr = predecessor(curr); //move the current node to its predecessor
+    return *this; //return the updated iterator
+    
+}
+
+
+Iterator Iterator::operator--(int) {
+    Iterator temp = *this; //store the current iterator in a temp variable
+    --(*this); //use the pre-decrement to move to the previous node
+    return temp; //return the original iterator
+}
+
+bool Iterator::operator==(const Iterator& other) const {
+    return curr == other.curr; //two iterators are equal if they point to the same node
+}
+
+bool Iterator::operator!=(const Iterator& other) const {
+    return curr != other.curr; //two iterators are not equal if they point to different nodes
+}
+
+
+void playGame(CardList& aliceHand, CardList& bobHand) {
+    bool founditsmatch = true; //boolean to keep track of if we found a match or not, if we found a match, we can end the game
+
+    while (founditsmatch) {
+        founditsmatch = false; //reset boolean at start of eaxch round
+
+        //alice goes forward
+
+        for (auto al_it = aliceHand.begin(); al_it != aliceHand.end(); ++al_it) {
+
+
+            Card aliceCard = *al_it; //get the current card from alice's hand
+            if (bobHand.contains(aliceCard)) {
+                std::cout << "Alice picked matching card " << aliceCard <<std::endl;
+
+                auto old_al_it = al_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
+                 ++al_it; //move the iterator to the next card before we remove the current card
+
+                aliceHand.remove(aliceCard); //removes the matching card
+                bobHand.remove(aliceCard); //removes the matching card
+
+                founditsmatch = true;  //reset it
+                break; ///dip
+            }
+        }
+
+        if (founditsmatch) {
+            continue;  //restart loop
+        }
+
+
+        //now for bob, but reversed
+        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); --bob_it) {
+            Card bobCard = *bob_it;
+
+            if (aliceHand.contains(bobCard)) {
+                std::cout << "Bob picked matching card " << bobCard <<std::endl;
+
+                bobHand.remove(bobCard); //removes the matching card
+                aliceHand.remove(bobCard); //removes the matching card
+
+                auto old_bob_it = bob_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
+                --bob_it; //move the iterator to the previous card before we remove the current card
+
+                founditsmatch  = true;  //reset it
+                break;  //dip
+            }
+
+            
+        }
+    }
+
+    //now we print the final hands
+
+    std::cout << "Alice's cards: " << std::endl;  //header
+    for (auto it = aliceHand.begin(); it != aliceHand.end(); ++it) {  //traverse
+        std::cout << *it << std::endl;
+    }
+    std::cout << "\n";
+//same thing for bob
+    std::cout << "Bob's cards: " << std::endl;
+    for (auto it = bobHand.begin(); it != bobHand.end(); ++it) {
+        std::cout << *it << std::endl;
+    }
 
 }

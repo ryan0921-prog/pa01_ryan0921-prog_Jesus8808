@@ -18,6 +18,28 @@ struct CardNode {
 
 
 };
+class Iterator {
+private:
+    CardNode* curr;
+
+    CardNode* successor(CardNode* node);
+    CardNode* predecessor(CardNode* node);
+
+
+public:
+    Iterator(CardNode* node);
+
+    const Card& operator*() const;
+    const Card* operator->() const;
+
+    Iterator& operator++(); //forward traversal, pre-increment
+    Iterator operator++(int); //forward traversal, post-increment
+    Iterator& operator--(); //reverse traversal, pre-decrement
+    Iterator operator--(int); //reverse traversal, post-decrement
+
+    bool operator==(const Iterator& other) const;
+    bool operator!=(const Iterator& other) const;
+};
 
 //now we create our card list class which is the player's hand in the BST
 class CardList {
@@ -34,11 +56,23 @@ public:
     void clear(CardNode* node); //helper function to help our remove function clear the tree using recursion.
     void inOrderHelper(CardNode* node) const; //helper function to print stuff in order usng recursion.
 
+    Iterator begin() const;
+    Iterator end() const;
+
+    Iterator rbegin() const;
+    Iterator rend() const;
+
+    
+
 
 private:
+    CardNode* findMin(CardNode* node) const;
+    CardNode* findMax(CardNode* node) const;
     CardNode* root;  //pointer to the root of the BST
 };
 
 
+
+void playGame(CardList& aliceHand, CardList& bobHand);
 
 #endif

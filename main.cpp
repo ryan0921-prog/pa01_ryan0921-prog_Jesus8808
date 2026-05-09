@@ -22,6 +22,8 @@ int main(int argv, char** argc){
     cout << "Could not open file " << argc[2];
     return 1;
   }
+  CardList aliceHand;
+  CardList bobHand;
 
   //Read each file
   while (getline (cardFile1, line) && (line.length() > 0)){
@@ -34,7 +36,7 @@ int main(int argv, char** argc){
 
   }
   cardFile2.close();
-  
+  playGame(aliceHand, bobHand);
   
   return 0;
 }
