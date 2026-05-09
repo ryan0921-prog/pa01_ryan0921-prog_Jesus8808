@@ -18,6 +18,7 @@ void CardList::clear(CardNode* node) {
 
 CardList::~CardList() { //destructor to clear the tree
     clear(root);
+    root = nullptr;  //prevent any dangling pointers
 }
 
 
@@ -37,6 +38,10 @@ bool CardList::contains(const Card& card) const {
 }
 //might have to change this function later, but for now it is what it is smh :)
 void CardList::insert(const Card& card) {
+    //check for duplicates first 
+    if (contains(card)) {
+        return;  //prevents insertion of duplicates
+    }
     if (root == nullptr) { //if the tree is empty, we can just set the root to be the new node
         root = new CardNode(card);
         return;
@@ -72,23 +77,21 @@ void CardList::insert(const Card& card) {
 void CardList::inOrderHelper(CardNode* node) const {
     if (node != nullptr) { //if the node is not null, we can continue traversing
         inOrderHelper(node->left); //traverse left
-        std::cout << node->data << " ";
+        std::cout << node->data << std::endl;  //one card per line like format
         inOrderHelper(node->right); //traverse right
     }
 }
 
 void CardList::printInOrder() const {
     inOrderHelper(root); //call the helper function starting from the root
-    std::cout << std::endl; //print a new line after printing all cards, like the formatting I believe
+    
 }
 
 
 //** ADD THE ITERARORS AND ITS CLASS
 
 void CardList::remove(const Card& card) {
-    if (!contains(card)) { //if the card is not in the tree, we can just return
-        return;
-    }
+    
 
     //We will need to first first the node to remove
     //then we can deal with three cases: Leaf node, one child node, and two child node
@@ -318,8 +321,8 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
             if (bobHand.contains(aliceCard)) {
                 std::cout << "Alice picked matching card " << aliceCard <<std::endl;
 
-                auto old_al_it = al_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
-                 ++al_it; //move the iterator to the next card before we remove the current card
+               
+                
 
                 aliceHand.remove(aliceCard); //removes the matching card
                 bobHand.remove(aliceCard); //removes the matching card
@@ -344,8 +347,8 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
                 bobHand.remove(bobCard); //removes the matching card
                 aliceHand.remove(bobCard); //removes the matching card
 
-                auto old_bob_it = bob_it; //store the current iterator before we remove the card, since removing the card will invalidate the iterator
-                --bob_it; //move the iterator to the previous card before we remove the current card
+                
+                
 
                 founditsmatch  = true;  //reset it
                 break;  //dip
