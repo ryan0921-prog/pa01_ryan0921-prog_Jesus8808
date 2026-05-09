@@ -151,9 +151,7 @@ void CardList::remove(const Card& card) {
             }
 
         }
-        if (child != nullptr) {
-            child->parent = parent;
-        }
+        
         delete curr; //delete the node to remove
         return;
     }
@@ -229,9 +227,10 @@ Iterator::Iterator(CardNode* node) {
 const Card& Iterator::operator*() const {
     static Card failure;  //STATIC means only printed once, 
     //this is something I had to look up in case I ran into a nullptr
-    if (!curr) {
+    //although it might not be necessary.
+    /*if (!curr) {
         return failure;
-    }
+    }*/
     return curr->data;
 }
 
@@ -340,7 +339,7 @@ void playGame(CardList& aliceHand, CardList& bobHand) {
         }
 
         //bob's turn
-        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); bob_it++) {
+        for (auto bob_it = bobHand.rbegin(); bob_it != bobHand.rend(); bob_it--) {
 
             Card bobCard = *bob_it;
 
